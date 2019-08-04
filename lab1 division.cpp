@@ -47,7 +47,7 @@ bool small(string a, string b)
         return 0;
     }
 }
-bool esmall(string a, string b)
+bool lessoreq(string a, string b)
 {
     lli l1= a.size();
     lli l2= b.size();
@@ -165,7 +165,7 @@ string divide(string a, string b)
         while(1)
         {
             lli i=0;
-            while(esmall(b, r))
+            while(lessoreq(b, r))
             {
                 r= subtract(r, b);
                 if(r=="0")
