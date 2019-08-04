@@ -11,6 +11,10 @@ using namespace std;
 /*CODE BEGINS*/
 int main()
 {
+    lli t;
+    cin>>t;
+    for(lli q=0; q<t; q++)
+    {
     string a, b;
     cin>>a >>b;
     reverse(a.begin(), a.end());
@@ -40,5 +44,6 @@ int main()
         carry= sum/10;
     }
     reverse(s.begin(), s.end());
-    cout<<s;
+    cout<<s <<endl;
+    }
 }
