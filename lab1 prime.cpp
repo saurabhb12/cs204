@@ -187,8 +187,7 @@ string remainder(string a, string b)
 {
     if(small(a, b))
     {
-        string zero="0";
-        return zero;
+        return a;
     }
     else
     {
