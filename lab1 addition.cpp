@@ -43,6 +43,10 @@ int main()
         s.push_back(sum%10 + '0');
         carry= sum/10;
     }
+        if(carry)
+        {
+            s.push_back(carry+'0');
+        }
     reverse(s.begin(), s.end());
     cout<<s <<endl;
     }
