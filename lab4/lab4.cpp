@@ -4,6 +4,8 @@
 #define vt vector
 #define f(x, y, z) for (lli x = y; x < z; x++)
 using namespace std;
+
+//Converting string to vector of strings//
 vector<string> stringTovector(string s)
 
 {
@@ -22,6 +24,7 @@ vector<string> stringTovector(string s)
           }st.push_back(temp);}
         return st;
 }
+//Precedence order for elements inside stack//
 int inprec(char input) 
 { 
 
@@ -40,6 +43,7 @@ int inprec(char input)
     } 
 } 
 
+//Precenece for operators outside stack//
 
 
 int outprec(char input) 
@@ -59,6 +63,8 @@ int outprec(char input)
         return 100; 
     } 
 } 
+
+//Convert infix vector to postfix vector//
 
 vector<string> infixToPostfix(vector<string> s) 
 { 
@@ -148,6 +154,8 @@ struct node
   node* lch=NULL,*rch=NULL;
 };
 
+//Constructing tree and return head node from postfix vector//
+
 node* construct_tree(vt <string> postfix)
 {
    node *root=NULL;
@@ -181,6 +189,8 @@ node* construct_tree(vt <string> postfix)
    if(stk.size()!=1)return NULL;
    return stk.back();
 }
+
+//Calculate value of tree by recursion//
 
 lli calculate(node *root)
 {
