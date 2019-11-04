@@ -9,7 +9,7 @@ const int N= 4e6;
 
 struct bucket
 {
-    set <int> a;
+    list <int> a;
 };
 
 struct bucket table[N];
@@ -23,7 +23,7 @@ int hashfunction(int x)
 void insert(int x)
 {
     int index= hashfunction(x);
-    table[index].a.insert(x);
+    table[index].a.push_back(x);
 }
 
 void deleteitem(int x)
@@ -40,7 +40,7 @@ void deleteitem(int x)
     }
     if(f)
     {
-        table[index].a.erase(x);
+        table[index].a.remove(x);
     }
 }
 
