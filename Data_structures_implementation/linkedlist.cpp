@@ -1,78 +1,167 @@
-#include <bits/stdc++.h> 
-using namespace std;  
-class Node
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node
 {
-public:
-    int value;
-    Node* nxt;
+    int x;
+    int y;
+    struct node *next;
 };
-class Node* createnode()
+
+struct node *head = NULL;
+
+void addfirst(int a,int b)
 {
-    Node* node = new Node;
-    return node;
+    struct node *temp;
+    temp = (struct node *)malloc(sizeof(struct node));
+    temp->x = a;
+    temp->y = b;
+    temp->next = head;
+    head = temp;
 }
-void insertb(Node** root,int x)
+
+int delfirst()
 {
-    Node* temp = createnode();
-    if(*root==NULL)
+    struct node *temp;
+    if(head == NULL)
     {
-        *root=temp;
-        temp->value=x;
-        temp->nxt=NULL;
-    }
-    else
+        return -1;
+    };
+    temp = head;
+    head = head->next;
+    delete temp;
+    temp = NULL;
+    return 1;
+}
+
+int del(int a,int b)
+{
+    struct node *temp,*prev = NULL;
+    temp = head;
+    int f=0;
+    while(temp != NULL)
     {
-        Node* t = *root;
-        while(t->nxt!=NULL)
+        if(temp->x==a  && temp->y==b)
         {
-            t=t->nxt;
+            struct node *temp2;
+            temp2= temp->next;
+            if(prev==NULL){
+                head= temp2;
+
+                delete(temp);
+                temp = NULL;
+            }
+            else{
+                prev->next = temp2;
+                delete(temp);
+                temp = NULL;
+            }
+            return 1;
         }
-        t->nxt=temp;
-        temp->value=x;
-        temp->nxt=NULL;
-    }
-}
-void dee(Node** root, int key)
-{
-    Node *a,*b;
-    a=*root;
-    while(a->value!=key && a!=NULL)
-    {
-        a=a->nxt;
-    }
-    if(a==NULL) return;
-    b=*root;
-    while(b->nxt->value!=key && b->nxt!=NULL)
-    {
-        b=b->nxt;
-    }
-    b->nxt=a->nxt;
-    delete a;
-    return;
-}
-void print(Node* root)
-{
-    Node* temp= root;
-    if(temp==NULL) return;
-    else
-    {
-        while(temp!=NULL)
+        else
         {
-            cout<<temp->value<<" ";
-            temp=temp->nxt;
+            prev = temp;
+            temp = temp->next;
         }
-        cout<<endl;
     }
+    return -1;
+}
+
+void search(long long int d)
+{
+    struct node *temp;
+    int flag=0;
+    temp = head;
+    long long int f;
+    long long int a,b;
+    while(temp!= NULL){
+        a = temp->x;
+        b= temp->y;
+        f = (a*a + b*b);
+        //cout<<a;
+        //f = f*f;
+        //cout<<f;
+        if(f<=d*d)
+        {
+            cout<<"("<<temp->x<<","<<temp->y<<") ";
+            flag++;
+        };
+        temp = temp->next;
+    };
+    if(flag==0)
+    {
+        cout<<"-1" <<endl;
+    }
+    else{
+        cout<<"\n";
+    }
+}
+
+bool searchpoint(int a,int b)
+{
+    struct node *temp;
+    temp = head;
+    while(temp!=  NULL)
+    {
+        if(temp->x == a  && temp->y==b){
+            return true;
+        }
+        temp= temp->next;
+    };
+    return false;
+};
+
+int length(){
+    int counter=0;
+    struct node *temp;
+    temp = head;
+    while(temp!= NULL)
+    {
+        counter++;
+        temp = temp->next;
+    }
+    return counter;
 }
 
 int main()
 {
-    Node* root=NULL;
-    insertb(&root,1);
-    insertb(&root,2);
-    insertb(&root,2);
-    insertb(&root,3);
-    insertb(&root,4);
-    insertb(&root,5);
-    print(root);
+    int a,b,c;
+    int t;
+    long long int d;
+    cin>>t;
+    for(int i=0;i<t;i++)
+    {
+        cin>>a;
+        if(a==1)
+        {
+            cin>>b>>c;
+            addfirst(b,c);
+        }
+        else if(a==2)
+        {
+            cout<< delfirst() <<endl;
+        }
+        else if(a==3)
+        {
+            cin>>b>>c;
+            cout<< del(b,c) <<endl;
+        }
+        else if(a==4){
+            cin>>d;
+            search (d);
+        }
+        else if(a==5){
+            cin>>b>>c;
+
+            if(searchpoint(b,c))cout<<"TRUE" <<endl;
+            else cout<<"FALSE" <<endl;
+        }
+        else
+            {
+
+            b= length();
+            cout<<b<<endl;
+        };
+    };
+    return 0;
 }
