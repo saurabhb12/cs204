@@ -1,208 +1,178 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-using namespace std;
+#include <bits/stdc++.h> 
+using namespace std; 
 
-// A Treap Node
-struct TreapNode
+struct cnode
 {
-	int data;
-	int priority;
-	TreapNode* left, *right;
-
-	// Constructor
-	TreapNode(int data)
-	{
-		this->data = data;
-		this->priority = rand() % 100;
-		this->left = this->right = nullptr;
-	}
+    int value;
+    int p;
+    cnode* leftp;
+    cnode* rightp;
 };
-
-void rotateLeft(TreapNode* &root)
+cnode* leftprotate(cnode* y)
 {
-	TreapNode* R = root->right;
-	TreapNode* X = root->right->left;
-
-	// rotate
-	R->left = root;
-	root->right = X;
-
-	// set new root
-	root = R;
+    cnode* x= y->rightp;
+    cnode* t2= x->leftp;
+    x->leftp= y;
+    y->rightp= t2;
+    return x; 
 }
 
-
-
-void rotateRight(TreapNode* &root)
+cnode* rightprotate(cnode* x)
 {
-	TreapNode* L = root->left;
-	TreapNode* Y = root->left->right;
-
-	// rotate
-	L->right = root;
-	root->left = Y;
-
-	// set new root
-	root = L;
+    cnode* y= x->leftp;
+    cnode* t2= y->rightp;
+    y->rightp= x;
+    x->leftp= t2;
+    return y;
 }
 
-
-void insertNode(TreapNode* &root, int data)
+cnode* newnode(int x)
 {
-	// base case
-	if (root == nullptr)
-	{
-		root = new TreapNode(data);
-		return;
-	}
-
-	if (data < root->data)
-	{
-		insertNode(root->left, data);
-
-	
-		if (root->left != nullptr && root->left->priority > root->priority)
-			rotateRight(root);
-	}
-	else
-	{
-		insertNode(root->right, data);
-
-		
-		if (root->right != nullptr && root->right->priority > root->priority)
-			rotateLeft(root);
-	}
+    cnode* temp= new cnode;
+    temp->value= x;
+    temp->p= rand()%100;
+    temp->leftp=NULL;
+    temp->rightp= NULL;
+    return temp;
 }
 
-bool searchNode(TreapNode* root, int key)
+cnode* search(cnode* root, int value)
 {
-	// if key is not present in the key
-	if (root == nullptr)
-		return false;
+    if(root==NULL || root->value==value)
+    {
+        return root;
+    }
 
-	// if key is found
-	if (root->data == key)
-		return true;
-
-	// if given key is less than the root node, search in the left subtree
-	if (key < root->data)
-		return searchNode(root->left, key);
-
-	// else search in the right subtree
-	return searchNode(root->right, key);
+    if(root->value>value)
+    {
+        return search(root->leftp, value);
+    }
+    if(root->value<value)
+    {
+        return search(root->rightp, value);
+    }
 }
 
-void deleteNode(TreapNode* &root, int key)
+cnode* insert(cnode* root, int value)
 {
-	
-	if (root == nullptr)
-		return;
+    if(root==NULL)
+    {
+        return newnode(value);
+    }
 
-	
-	if (key < root->data)
-		deleteNode(root->left, key);
+    if(root->value>=value)
+    {
+        root->leftp= insert(root->leftp, value);
+        if(root->leftp->p>root->p)
+        {
+            root= rightprotate(root);
+        }
+    }
+    else if(root->value<value)
+    {
+        root->rightp= insert(root->rightp, value);
+        if(root->rightp->p>root->p)
+        {
+            root= leftprotate(root);
+        }
+    }
 
-
-	else if (key > root->data)
-		deleteNode(root->right, key);
-
-
-	else
-	{
-
-		if (root->left == nullptr && root->right == nullptr)
-		{
-			delete root;
-			root = nullptr;
-		}
-
-		// Case 2: node to be deleted has two children
-		else if (root->left && root->right)
-		{
-			// if left child has less priority than right child
-			if (root->left->priority < root->right->priority)
-			{
-				// call rotateLeft on root
-				rotateLeft(root);
-
-				// recursively delete the left child
-				deleteNode(root->left, key);
-			}
-			else
-			{
-				// call rotateRight on root
-				rotateRight(root);
-
-				// recursively delete the right child
-				deleteNode(root->right, key);
-			}
-		}
-
-		// Case 3: node to be deleted has only one child
-		else
-		{
-			// find child node
-			TreapNode* child = (root->left)? root->left: root->right;
-			TreapNode* curr = root;
-
-			root = child;
-
-			// deallocate the memory
-			delete curr;
-		}
-	}
-}
-void printTreap(TreapNode *root, int space = 0, int height = 10)
-{
-	// Base case
-	if (root == nullptr)
-		return;
-
-	// increase distance between levels
-	space += height;
-
-	// print right child first
-	printTreap(root->right, space);
-	cout << endl;
-
-	// print current node after padding with spaces
-	for (int i = height; i < space; i++)
-		cout << ' ';
-	cout << root->data << "(" << root->priority << ")\n";
-
-	// print left child
-	cout << endl;
-	printTreap(root->left, space);
+    return root;
 }
 
-// main function
+cnode* deletenode(cnode* root, int value)
+{
+    if(root==NULL)
+    {
+        return root;
+    }
+    //If value is not equal to root's value, we check in its rightp or leftp subtree//
+    if(root->value>value)
+    {
+        root->leftp= deletenode(root->leftp, value);
+    }
+    else if(root->value<value)
+    {
+        root->rightp= deletenode(root->rightp, value);
+    }
+    else if(root->value==value)
+    {
+        if(root->leftp==NULL)
+        {
+            cnode* temp= root->rightp;
+            delete(root);
+            root= temp;
+        }
+        else if(root->rightp==NULL)
+        {
+            cnode* temp= root->leftp;
+            delete(root);
+            root= temp;
+        }
+        else if(root->leftp!=NULL && root->rightp!=NULL)
+        {
+            if(root->leftp->p>root->rightp->p)
+            {
+                root= rightprotate(root);
+                root->rightp= deletenode(root->rightp, value);
+            }
+            else if(root->rightp->p>root->leftp->p)
+            {
+                root= leftprotate(root);
+                root->leftp= deletenode(root->leftp, value);
+            }
+        }
+    }
+    return root;
+}
+
+void inorder(cnode* root) 
+{ 
+    if (root) 
+    { 
+        inorder(root->leftp); 
+        cout << "value: "<< root->value << " | p: %d "
+            << root->p; 
+        if (root->leftp) 
+            cout << " | leftp child: " << root->leftp->value; 
+        if (root->rightp) 
+            cout << " | rightp child: " << root->rightp->value; 
+        cout << endl; 
+        inorder(root->rightp); 
+    } 
+} 
 int main()
 {
-	// Treap keys
-	int keys[] = { 5, 2, 1, 4, 9, 8, 10 };
-
-	int n = sizeof(keys)/sizeof(int);
-
-	// Construct a Treap
-	TreapNode* root = nullptr;
-	for (int key: keys)
-		insertNode(root, key);
-
-	cout << "Constructed Treap:\n\n";
-	printTreap(root);
-
-	cout << "\nDeleting node 1:\n\n";
-	deleteNode(root, 1);
-	printTreap(root);
-
-	cout << "\nDeleting node 5:\n\n";
-	deleteNode(root, 5);
-	printTreap(root);
-
-	cout << "\nDeleting node 9:\n\n";
-	deleteNode(root, 9);
-	printTreap(root);
-
-	return 0;
+     struct cnode *root = NULL; 
+    root = insert(root, 50); 
+    root = insert(root, 30); 
+    root = insert(root, 20); 
+    root = insert(root, 40); 
+    root = insert(root, 70); 
+    root = insert(root, 60); 
+    root = insert(root, 80); 
+  
+    cout << "Inorder traversal of the given tree \n"; 
+    inorder(root); 
+  
+    cout << "\nDelete 20\n"; 
+    root = deletenode(root, 20); 
+    cout << "Inorder traversal of the modified tree \n"; 
+    inorder(root); 
+  
+    cout << "\nDelete 30\n"; 
+    root = deletenode(root, 30); 
+    cout << "Inorder traversal of the modified tree \n"; 
+    inorder(root); 
+  
+    cout << "\nDelete 50\n"; 
+    root = deletenode(root, 50); 
+    cout << "Inorder traversal of the modified tree \n"; 
+    inorder(root); 
+  
+    cnode *res = search(root, 50); 
+    (res == NULL)? cout << "\n50 Not Found ": 
+                   cout << "\n50 found"; 
+  
+    return 0; 
 }
