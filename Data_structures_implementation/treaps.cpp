@@ -128,10 +128,10 @@ cnode* deletenode(cnode* root, int value)
 
 void inorder(cnode* root) 
 { 
-    if (root) 
+    if (root!=NULL) 
     { 
         inorder(root->leftp); 
-        cout << "value: "<< root->value << " | p: %d "
+        cout << "value: "<< root->value << " | Priority: "
             << root->p; 
         if (root->leftp) 
             cout << " | leftp child: " << root->leftp->value; 
@@ -149,30 +149,32 @@ int main()
     root = insert(root, 20); 
     root = insert(root, 40); 
     root = insert(root, 70); 
-    root = insert(root, 60); 
-    root = insert(root, 80); 
+    root = insert(root, 120); 
+    root = insert(root, 102); 
   
     cout << "Inorder traversal of the given tree \n"; 
     inorder(root); 
-  
-    cout << "\nDelete 20\n"; 
+
     root = deletenode(root, 20); 
-    cout << "Inorder traversal of the modified tree \n"; 
+    cout << "Inorder traversal of the modified tree after deletion of 20 \n"; 
     inorder(root); 
-  
-    cout << "\nDelete 30\n"; 
+
     root = deletenode(root, 30); 
-    cout << "Inorder traversal of the modified tree \n"; 
+    cout << "Inorder traversal of the modified tree after deletion of 30 \n"; 
     inorder(root); 
   
-    cout << "\nDelete 50\n"; 
     root = deletenode(root, 50); 
-    cout << "Inorder traversal of the modified tree \n"; 
+    cout << "Inorder traversal of the modified tree after deletion of 50\n"; 
     inorder(root); 
   
     cnode *res = search(root, 50); 
-    (res == NULL)? cout << "\n50 Not Found ": 
-                   cout << "\n50 found"; 
-  
+    if(res==NULL)
+    {
+        cout<<"50 is not Found!!!" <<endl;
+    }
+    else 
+    {
+        cout<< "50 is found!!!" <<endl;
+    }
     return 0; 
 }
