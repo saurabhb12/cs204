@@ -2,13 +2,6 @@
 using namespace std;
 #define M 1000000007
 #define ll long long
-#define REP(i,a,b) for(ll i=a;i<b;i++)
-#define ff first
-#define ss second
-#define pb push_back
-#define mp make_pair
-#define vi vector<int>
-#define vll vector<long long>
 class STACK
 {
     private:
@@ -36,13 +29,13 @@ public:
 int main() 
 { 
   STACK s;
-  s.push(1);
+  s.push(5);
   cout<<s.size()<<"\n";
   cout<<s.top()<<"\n";
-  s.push(2);
-  s.push(3);
+  s.push(7);
+  s.push(8);
   cout<<s.size()<<"\n";
-  s.push(5);
+  s.push(9);
   s.pop();
   cout<<s.size()<<"\n";
   s.pop();
